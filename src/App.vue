@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <!-- <div id="app">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="primary" style="border-radius:12px;">
         <b-navbar-brand href="#">KanbanApp</b-navbar-brand>
@@ -12,10 +12,10 @@
             <b-nav-item href="#" disabled>Disabled</b-nav-item>
           </b-navbar-nav>
     
-          <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
+           Right aligned nav items -->
+          <!-- <b-navbar-nav class="ml-auto">
             <b-nav-form>
-              <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+              <b-form-input v-model="search" @keyup="getMatch()" size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
               <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
             </b-nav-form>
     
@@ -27,8 +27,8 @@
             </b-nav-item-dropdown>
     
             <b-nav-item-dropdown right>
-              <!-- Using 'button-content' slot -->
-              <template #button-content>
+              Using 'button-content' slot -->
+              <!-- <template #button-content>
                 <em>User</em>
               </template>
               <b-dropdown-item href="#">Profile</b-dropdown-item>
@@ -38,10 +38,27 @@
         </b-collapse>
       </b-navbar>
     </div>
-    
-    <router-view/>
-  </div>
+     --> 
+    <div id="app">
+      <router-view/>
+    </div>  
+  <!-- </div> -->
 </template>
+
+<script>
+export default{
+  data: function(){
+    return{
+      search:''
+    }
+  },
+  methods:{
+    getMatch : function(){
+      
+    }
+  }
+}
+</script>
 
 <style>
 #app {

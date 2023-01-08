@@ -7,10 +7,13 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import MyList from './components/MyList.vue'
-
+import NoLists from './components/NoLists.vue'
 
 Vue.config.productionTip = false
 Vue.component('MyList',MyList)
+Vue.component('NoLists',NoLists)
+
+
 new Vue({
   router,
   store,
