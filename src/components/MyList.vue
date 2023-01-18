@@ -29,7 +29,7 @@
   
       <!-- <b-button href="#" variant="primary">{{title}}</b-button> -->
       <hr>
-      <MyCard v-for="c in card" :status="getCardStatus(c)" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
+      <MyCard  v-for="c in card" :status="getCardStatus(c)" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
     </b-card>
   
     <b-modal
@@ -122,7 +122,7 @@ export default {
     getCardStatus: function(card){
       const today = new Date()
       const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-      return (new Date(date) < new Date(card.deadline_dt.split(" ")[0]))
+      return (new Date(date) < new Date(card.deadline_dt.split(" ")[0])&&card.iscompleye)
     },
   checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
