@@ -2,9 +2,9 @@
   
   <div>
     
-    <b-card
+    <b-card 
       
-      img-src="@/assets/card_pic.png"
+      img-src="@/assets/gradient (1).png"
       img-alt="Image"
       img-top
       tag="article"
@@ -30,7 +30,7 @@
       <hr>
       <MyCard  v-for="c in card" :status="getCardStatus(c)" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
     </b-card>
-    
+    ------------------------
     <b-modal
       :id="modalId"
       ref="modal"
@@ -57,7 +57,7 @@
         <b-form-group
           label="Card Content"
           label-for="card-content"
-          invalid-feedback="Name is required"
+          invalid-feedback="Content is required"
           :state="nameState"
           >
           <b-form-input
@@ -71,7 +71,7 @@
         <b-form-group
           label="Card Deadline"
           label-for="card-deadline"
-          invalid-feedback="Name is required"
+          invalid-feedback="Please select a valid deadline"
           :state="nameState"
           >
           <b-form-datepicker :min="minDate" id="card-deadline" v-model="date" class="mb-2" ></b-form-datepicker>

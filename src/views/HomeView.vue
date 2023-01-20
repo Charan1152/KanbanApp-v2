@@ -1,12 +1,16 @@
 <template>
-  <div class="home" style="padding:30px;background-color:	#484848">
+  <div class="home" style="padding:30px;background-color:#CCCCCC;">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+
     <div>
-      <b-navbar fixed="top" toggleable="lg" type="dark" variant="primary" style="border-radius:12px;">
-        <b-navbar-brand href="#">KanbanApp</b-navbar-brand>
+      <b-navbar fixed="top" toggleable="lg" type="dark" style="border-radius:12px;background-color:#243748">
+      <b-navbar-brand></b-navbar-brand>
+      <b-navbar-brand></b-navbar-brand>
+        <b-navbar-brand href="/"><b>KanbanApp</b></b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
-            <b-nav-item v-b-modal.modal-prevent-closing>Add New List</b-nav-item>
+            <b-nav-item v-b-modal.modal-prevent-closing><b>Add New List</b></b-nav-item>
             
             
             <b-modal
