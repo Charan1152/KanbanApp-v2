@@ -64,14 +64,15 @@
       },
       markcom: function(){
         fetch(`http://localhost:5000/api/updateCard/${this.id}`, {
-          method: 'UPDATE',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
           body:{"card_title":"Sample Changex",
             "card_content":"Sample Change Content",
             "deadline_dt":"2023-01-26",
-            "list_id":this.id
+            "list_id":this.id,
+            "iscomplete":'1'
           }
         });
       }
