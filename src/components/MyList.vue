@@ -28,7 +28,7 @@
       </b-card-text>
 
       <hr>
-      <MyCard  v-for="c in card" :status="getCardStatus(c)" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
+      <MyCard  v-for="c in card" :status="getCardStatus(c)" :listid="id" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
     </b-card>
     ------------------------
     <b-modal

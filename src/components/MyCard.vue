@@ -49,7 +49,7 @@
 <script>
   export default {
     name: 'MyCard',
-    props:['card','id','status'],
+    props:['card','id','status','listid'],
     methods:{
       deleteCard: function(){
         if(confirm("Are you sure you want to delete?")){
@@ -68,13 +68,14 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body:{"card_title":"Sample Changex",
-            "card_content":"Sample Change Content",
-            "deadline_dt":"2023-01-26",
-            "list_id":this.id,
-            "iscomplete":'1'
-          }
+          body:JSON.stringify({"card_title":this.card.card_title,
+            "card_content":this.card.card_content,
+            "deadline_dt":this.card.deadline_dt.split(" ")[0],
+            "list_id": this.listid,
+            "iscomplete":"1"
+          })
         });
+        this.$router.go()
       }
     }
   }
