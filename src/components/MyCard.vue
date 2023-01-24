@@ -37,7 +37,6 @@
       <template #footer>
         <b-button-group style="color:red;"><b-icon icon="exclamation-circle-fill" ></b-icon></b-button-group><b style="color:red;">&nbsp;{{ card.deadline_dt.split(" ")[0] }}</b>
       </template>
-      <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
     </b-card>
 
 
