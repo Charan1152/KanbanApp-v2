@@ -1,12 +1,9 @@
 <template>
-    <div class="card">
-        <form method="post" action="/">
-            <h2>Username</h2><input class="input" type="text" name="uname" v-model="this.uname" placeholder="Username">
-            <h2>Password</h2><input class="input" type="password" name="pword" v-model="this.pword" placeholder="Password">
-            <input class="btn-grad" id="submitbtn" type="submit" value="Log In">
-        </form>
-        Dont have an Account?&emsp;<a href="/signUp" id='one' style="display: inline-block; color: black;">Sign Up Here</a><br>
-        Forgot Your Credentials?&emsp;<a href="/forgotCredentials" id='two' style="display: inline-block; color: black;">Click Here</a>
+    <div style="padding-top:150px;">
+            <h2>Username</h2><input class="input" type="text" name="username" v-model="userlogdata.email">
+            <h2>Password</h2><input class="input" type="password" name="password" v-model="userlogdata.password"><br>
+            <br/><input class="btn-grad" id="submitbtn" type="submit" @click="call()" value="Log In"><br/><br/>
+            <input class="btn-grad" id="signup" type="button" value="Sign Up">
       </div>
 </template>
 
@@ -15,13 +12,18 @@ import Vuex from 'vuex'
 export default{
     data() {
         return{
-            uname:"",
-            pword:""
+            userlogdata:{
+                email:"",
+                password:""
+            }
         }
     },
     methods:{
         ...Vuex.mapMutations(['login', 'logout']),
-        ...Vuex.mapActions(['loginUser'])
+        ...Vuex.mapActions(['loginUser']),
+        call: function(){
+            this.loginUser(this.userlogdata)
+        }
     }
 }
 </script>

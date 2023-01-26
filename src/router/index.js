@@ -6,8 +6,8 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/board',
-    name: 'home',
+    path: '/HomeView',
+    name: 'HomeView',
     component: HomeView
   },
   {
@@ -24,6 +24,11 @@ const routes = [
     path: '/',
     name: 'login',
     component: () => import('../views/LoginPage.vue')
+  },
+  {
+    path: '/logout',
+    name: 'LogoutPage',
+    component: () => import('../views/LogoutPage.vue')
   }
 ]
 

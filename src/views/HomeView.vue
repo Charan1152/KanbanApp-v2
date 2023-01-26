@@ -11,8 +11,9 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item v-b-modal.modal-prevent-closing><b>Add New List</b></b-nav-item>
-            
-            
+            <b-nav-item >|</b-nav-item>
+            <!-- <a href="/"><b>Logout</b></a> -->
+            <b-nav-item><b><router-link to="/logout">Logout</router-link></b></b-nav-item>
             <b-modal
               id="modal-prevent-closing"
               ref="modal"
@@ -64,8 +65,12 @@
 
 <script>
   // @ is an alias to /src
+
+import store from '@/store'
+
   
   export default {
+    name: 'HomeView',
     data: function () {
       return {
         userData: {},
@@ -75,7 +80,8 @@
       }
     },
     async mounted() {
-      const response = await fetch('http://localhost:5000/api/1')
+      // console.log(this.$router.params.id)
+      const response = await fetch(`http://127.0.0.1:5000/api/${localStorage.getItem('id')}`, {headers:{'Authentication-token':store.getters.token}})
       this.userData = await response.json()
     },
     computed: {
@@ -138,7 +144,8 @@
         fetch(`http://localhost:5000/api/createList/${this.userData.user_id}`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authentication-token':this.$store.getters.token
           },
           body: JSON.stringify({
             listname : this.listname
@@ -160,7 +167,6 @@
         return f
       }
     },
-    name: 'HomeView',
     components: {
     }
   }

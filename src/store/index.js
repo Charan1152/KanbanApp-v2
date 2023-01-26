@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router/index.js'
 
 Vue.use(Vuex)
 
@@ -19,32 +20,37 @@ export default new Vuex.Store({
   mutations: {
     login(state) {
       state.loggedIn = true
+    },
+    logout(state) {
+      state.loggedIn = false
     }
   },
   actions: {
+    logoutUser({ commit }) {
+      localStorage.clear();
+      commit('logout')
+      router.push({ name: 'login' })
+    },
     async loginUser({ commit }, user) {
-      const res = FetchFunction({
-        url: 'http://127.0.0.1:8080/login?include_auth_token',
-        init_obj: {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify(user),
+      console.log(user)
+      const res = await fetch(`http://127.0.0.1:5000/login?include_auth_token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-      })
-      console.log(user.email)
+        body: JSON.stringify(
+          user 
+        )
+      });
       localStorage.setItem('email', user.email)
-      res
-        .then((data) => {
-          const authToken = data.response.user.authentication_token
-          commit('login')
-          commit('useremail', user.email)
-          setTimeout(router.push({ name: 'Dashboard', params: { email: user.email } }),2000)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      res.json().then((d)=>{
+        console.log(d.response)
+        const authToken = d.response.user.authentication_token
+        localStorage.setItem('token', authToken)
+        localStorage.setItem('id', d.response.user.id)
+        commit('login')
+        router.push({ name: 'HomeView' })
+      })
     }
   },
   modules: {

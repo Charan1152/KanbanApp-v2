@@ -29,7 +29,7 @@ export default {
     }
   },
   async mounted() {
-      const response = await fetch('http://localhost:5000/api/1')
+      const response = await fetch('http://localhost:5000/api/1',{ headers:{'Authentication-token':this.$store.getters.token}})
       this.userData = await response.json()
       this.fun()
     },

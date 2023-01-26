@@ -55,7 +55,8 @@
           fetch(`http://localhost:5000/api/deleteCard/${this.id}`, {
             method: 'DELETE',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authentication-token':this.$store.getters.token
             },
           });
           this.$router.go()
@@ -65,13 +66,15 @@
         fetch(`http://localhost:5000/api/updateCard/${this.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authentication-token':this.$store.getters.token
           },
-          body:JSON.stringify({"card_title":this.card.card_title,
+          body:JSON.stringify({
+            "card_title":this.card.card_title,
             "card_content":this.card.card_content,
             "deadline_dt":this.card.deadline_dt.split(" ")[0],
             "list_id": this.listid,
-            "iscomplete":"1"
+            "iscomplete":"1",
           })
         });
         this.$router.go()

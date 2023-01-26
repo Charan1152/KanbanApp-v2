@@ -173,7 +173,8 @@
           fetch(`http://localhost:5000/api/deleteList/${this.id}`, {
             method: 'DELETE',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authentication-token':this.$store.getters.token
             },
           });
           this.$router.go()
@@ -215,7 +216,8 @@
         fetch(`http://localhost:5000/api/createCard/${this.id}`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authentication-token':this.$store.getters.token
           },
           body: JSON.stringify({
             "list_id":this.id,
@@ -262,7 +264,8 @@
         fetch(`http://localhost:5000/api/updateList/${this.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authentication-token':this.$store.getters.token
           },
           body: JSON.stringify({
             "listname": this.listnameedit
