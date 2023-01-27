@@ -1,19 +1,22 @@
 <template>
+  <html>
   <div class="home" style="padding:30px;background-color:#CCCCCC;">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
-
+    
     <div>
       <b-navbar fixed="top" toggleable="lg" type="dark" style="border-radius:12px;background-color:#243748">
-      <b-navbar-brand></b-navbar-brand>
-      <b-navbar-brand></b-navbar-brand>
-        <b-navbar-brand href="/"><b>KanbanApp</b></b-navbar-brand>
+        <b-navbar-brand></b-navbar-brand>
+        <b-navbar-brand></b-navbar-brand>
+        <b-navbar-brand style="color:white;"><router-link to="/HomeView"><b style="color:white;">KanbanV2</b></router-link></b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
-            <b-nav-item v-b-modal.modal-prevent-closing><b>Add New List</b></b-nav-item>
+            <b-nav-item v-b-modal.modal-prevent-closing><b style="color:white;">Add New List</b></b-nav-item>
+            <b-nav-item >|</b-nav-item>
+            <b-nav-item><router-link to="/summary"><b style="color:white;">Summary</b></router-link></b-nav-item>
             <b-nav-item >|</b-nav-item>
             <!-- <a href="/"><b>Logout</b></a> -->
-            <b-nav-item><b><router-link to="/logout">Logout</router-link></b></b-nav-item>
+            <b-nav-item><router-link to="/logout"><b style="color:white;">Logout</b></router-link></b-nav-item>
             <b-modal
               id="modal-prevent-closing"
               ref="modal"
@@ -48,27 +51,28 @@
         </b-collapse>
       </b-navbar>
     </div>
+
+
     <br>
     <br>
+
+
     <div>
       <b-card-group deck>
-        <div class="row cols-5 row-cols-1 row-cols-md-5 g-4">
-          <!-- <MyList v-for="i in users" :key="i"  :todo="i"/> -->
-          <NoLists v-if="userData.lists.length == 0"></NoLists>
-          <MyList v-else v-for="i, j in (userData.lists, searchlist)" :card="getActiveCards(i.cards)" :key="i.list_id" :title="searchlist[j].listname"
-            :id="i.list_id" :lists="userData.lists"></MyList>
+        <NoLists v-if="userData.lists.length == 0"></NoLists>
+        <div class="container-fluid text-center col row cols-5 row-cols-1 row-cols-md-5 g-4">
+          <MyList v-for="i, j in (userData.lists, searchlist)" :card="getActiveCards(i.cards)" :key="i.list_id" :title="searchlist[j].listname"
+            :id="i.list_id" :lists="userData.lists" :lst="i"></MyList>
         </div>
       </b-card-group>
     </div>
   </div>
+</html>
+
 </template>
 
 <script>
-  // @ is an alias to /src
-
-import store from '@/store'
-
-  
+  // @ is an alias to /src  
   export default {
     name: 'HomeView',
     data: function () {
@@ -80,16 +84,16 @@ import store from '@/store'
       }
     },
     async mounted() {
-      // console.log(this.$router.params.id)
-      const response = await fetch(`http://127.0.0.1:5000/api/${localStorage.getItem('id')}`, {headers:{'Authentication-token':store.getters.token}})
+      
+      const response = await fetch(`http://127.0.0.1:5000/api/${localStorage.getItem('id')}`, {headers:{'Authentication-token':localStorage.getItem('token')}})
       this.userData = await response.json()
     },
     computed: {
       searchlist: function () {
         return this.userData.lists.filter(e => e.listname.includes(this.search))
       },
-
-
+      
+      
       nameState(){
         function check(listnameeditx,lists){
           for (let i in lists){
@@ -135,17 +139,17 @@ import store from '@/store'
         // Trigger submit handler
         this.handleSubmit()
       },
-      handleSubmit() {
+      async handleSubmit() {
         // Exit when the form isn't valid
         if (!this.checkFormValidity()) {
           return
         }
         // Push the name to submitted names
-        fetch(`http://localhost:5000/api/createList/${this.userData.user_id}`, {
+        await fetch(`http://localhost:5000/api/createList/${this.userData.user_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authentication-token':this.$store.getters.token
+            'Authentication-token':localStorage.getItem('token')
           },
           body: JSON.stringify({
             listname : this.listname
@@ -173,5 +177,8 @@ import store from '@/store'
 </script>
 
 <style scoped>
-  
+body{
+  background-color: #CCCCCC;
+}
+
 </style>

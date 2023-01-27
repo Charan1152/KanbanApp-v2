@@ -16,19 +16,20 @@
           
         </div>
         <div class="card-img-overlay" style="padding-top:50px;">
-          <b-dropdown  id="dropdown-1" :text=title class="m-md-2 text-wrap" variant="primary" >
+          <b-dropdown  id="dropdown-1" :text=title class="m-md-2 text-wrap bold" variant="primary" >
             <b-dropdown-item v-b-modal='modalId'>Add Card</b-dropdown-item>
             <b-dropdown-item v-b-modal="ListId">Edit List</b-dropdown-item>
             <b-dropdown-item @click="deleteList">Delete List</b-dropdown-item>
           </b-dropdown>
         </div>
       </div>
+      <EditList :lst="lst" :lists="lists" hidden></EditList>
       
       <b-card-text>
       </b-card-text>
 
-      <hr>
-      <MyCard  v-for="c in card" :status="getCardStatus(c)" :listid="id" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
+      
+      <MyCard  v-for="c in card" :status="getCardStatus(c)" :cards="card" :lname="title" :lists="lists" :listid="id" :key="c.card_id" :id="c.card_id" :card="c"></MyCard>
     </b-card>
     ------------------------
     <b-modal
@@ -78,59 +79,28 @@
         </b-form-group>
       </form>
     </b-modal>
-    
-    
-    <!-- Rename List Modal -->
-    <b-modal
-      :id="ListId"
-      ref="modal"
-      title="Edit List"
-      @show="resetModall"
-      @hidden="resetModall"
-      @ok="handleOkl"
-      >
-      <form ref="form" @submit.stop.prevent="handleSubmitl">
-        <b-form-group
-          label="New List Name"
-          label-for="new-list-input"
-          :invalid-feedback='invalidFeedbackx'
-          :state="nameStatex"
-          >
-          <b-form-input
-            id="name-input"
-            v-model="listnameedit"
-            :state="nameStatex"
-            trim>
-          </b-form-input>
-        </b-form-group>
         
-      </form>
-    </b-modal>
-    
   </div>
 </template>
 
 <script>
+// import store from '@/store/index.js'
   export default {
     name: 'MyList',
     components: {
     },
-    props: [
-      "todo",
-      "title",
-      "id",
-      "card"],
+    props: ["todo","title","id","card","lst","lists"],
     computed:{
       modalId(){
         return `modal-${this.id}`
       },
       ListId(){
-        return `lmodal-${this.id}`
+        return `lmodal-${this.lst.list_id}`
       },
       nameStatex(){
-        function check(listnameeditx,lists){
+        function check(listnameedit,lists){
           for (let i in this.lists){
-            if(lists[i].listname.includes(listnameeditx)){
+            if(lists[i].listname.includes(listnameedit)){
               return true
             }
           }
@@ -139,9 +109,9 @@
         return (this.listnameedit.length > 0 && !check(this.listnameedit,this.lists))
       },
       invalidFeedbackx(){
-        function check(listnameeditx,lists){
+        function check(listnameedit,lists){
           for (let i in lists){
-            if(lists[i].listname.includes(listnameeditx)){
+            if(lists[i].listname.includes(listnameedit)){
               return true
             }
           }
@@ -168,22 +138,24 @@
     }
     ,
     methods:{
-      deleteList: function(){
+      deleteList: async function(){
         if(confirm("Are you sure you want to delete?")){
-          fetch(`http://localhost:5000/api/deleteList/${this.id}`, {
+          await fetch(`http://localhost:5000/api/deleteList/${this.id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
-              'Authentication-token':this.$store.getters.token
+              'Authentication-token':localStorage.getItem("token")
             },
           });
           this.$router.go()
         }
       },
       getCardStatus: function(card){
-        const today = new Date()
-        const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-        return (new Date(date) < new Date(card.deadline_dt.split(" ")[0]) && card.isactive==true)
+        if (card.iscomplete == true){
+          return false
+        }
+        return true
+
       },
 
       // Card Add Handle
@@ -202,7 +174,7 @@
         // Trigger submit handler
         this.handleSubmit()
       },
-      handleSubmit() {
+      async handleSubmit() {
         if (new Date(this.date) < new Date()){
           alert("Please provide a valid deadline")
           return
@@ -213,20 +185,23 @@
           return
         }
         // fetch post to add card
-        fetch(`http://localhost:5000/api/createCard/${this.id}`, {
+        
+        let obj ={
+            "card_title":this.name,
+            "card_content":this.card_content,
+            "deadline_dt":this.date,
+            "list_id":this.id
+          }
+        await fetch(`http://localhost:5000/api/createCard/${this.id}`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authentication-token':this.$store.getters.token
+            "Content-Type": "application/json",
+            "Authentication-token":localStorage.getItem("token")
           },
-          body: JSON.stringify({
-            "list_id":this.id,
-            "deadline_dt":this.date,
-            "card_title":this.name,
-            "card_content":this.card_content
-          })
+          body: JSON.stringify(obj)
+          
         });
-        
+
         // Hide the modal manually
         this.$nextTick(() => {
           this.$bvModal.hide()
@@ -235,56 +210,12 @@
       },
       
       // Card add handle End
-
-      // List Edit Handle
-
-
-      checkFormValidityl() {
-        const valid = this.$refs.form.checkValidity()
-        this.nameStatex = valid
-        return valid
-      },
-      resetModall() {
-        this.name = ''
-        this.nameStatex = null
-      },
-      handleOkl(bvModalEvent) {
-        // Prevent modal from closing
-        bvModalEvent.preventDefault()
-        // Trigger submit handler
-        this.handleSubmitl()
-      },
-      handleSubmitl() {
-               
-        // Exit when the form isn't valid
-        if (!this.checkFormValidityl()) {
-          return
-        }
-        // fetch post to add card
-        fetch(`http://localhost:5000/api/updateList/${this.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authentication-token':this.$store.getters.token
-          },
-          body: JSON.stringify({
-            "listname": this.listnameedit
-          })
-        });
-        
-        // Hide the modal manually
-        this.$nextTick(() => {
-          this.$bvModal.hide()
-        })
-        this.$router.go()
-      }
-      //List Edit  Handle End
-
-
     }
-  }
+}
 </script>
 
 <style scoped>
-  
+.bold{
+  font-weight: bold;
+}
 </style>

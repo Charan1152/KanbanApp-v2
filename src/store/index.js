@@ -32,7 +32,6 @@ export default new Vuex.Store({
       router.push({ name: 'login' })
     },
     async loginUser({ commit }, user) {
-      console.log(user)
       const res = await fetch(`http://127.0.0.1:5000/login?include_auth_token`, {
         method: 'POST',
         headers: {
@@ -44,13 +43,12 @@ export default new Vuex.Store({
       });
       localStorage.setItem('email', user.email)
       res.json().then((d)=>{
-        console.log(d.response)
         const authToken = d.response.user.authentication_token
         localStorage.setItem('token', authToken)
         localStorage.setItem('id', d.response.user.id)
         commit('login')
         router.push({ name: 'HomeView' })
-      })
+      }).catch((e)=>{alert("Incorrect Credentials, Please try again",e)})
     }
   },
   modules: {

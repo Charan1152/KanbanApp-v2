@@ -12,7 +12,7 @@ import MyCard from './components/MyCard.vue'
 import { BIcon } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
-
+import EditList from './components/EditList.vue'
 
 Vue.config.productionTip = false
 
@@ -23,6 +23,7 @@ Vue.component('MyList',MyList)
 Vue.component('NoLists',NoLists)
 Vue.component('MyCard',MyCard)
 Vue.component('BIcon', BIcon)
+Vue.component('EditList',EditList)
 
 new Vue({
   router,
