@@ -47,7 +47,7 @@ export default {
     }
   },
   async mounted() {
-    const response = await fetch('http://localhost:5000/api/1', { headers: { 'Authentication-token': this.$store.getters.token } })
+    const response = await fetch(`http://localhost:5000/api/${localStorage.getItem("email")}`, { headers: { 'Authentication-token': localStorage.getItem("token") } })
     this.userData = await response.json()
     this.fun()
   },

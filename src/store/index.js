@@ -45,7 +45,7 @@ export default new Vuex.Store({
       res.json().then((d)=>{
         const authToken = d.response.user.authentication_token
         localStorage.setItem('token', authToken)
-        localStorage.setItem('id', d.response.user.id)
+        // localStorage.setItem('id', d.response.user.id)
         commit('login')
         router.push({ name: 'HomeView' })
       }).catch((e)=>{alert("Incorrect Credentials, Please try again",e)})

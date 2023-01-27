@@ -85,7 +85,7 @@
     },
     async mounted() {
       
-      const response = await fetch(`http://127.0.0.1:5000/api/${localStorage.getItem('id')}`, {headers:{'Authentication-token':localStorage.getItem('token')}})
+      const response = await fetch(`http://127.0.0.1:5000/api/${localStorage.getItem('email')}`, {headers:{'Authentication-token':localStorage.getItem('token')}})
       this.userData = await response.json()
     },
     computed: {

@@ -49,6 +49,7 @@
  @hidden="resetModalc"
  @ok="handleOkc"
  >
+{{this.crd}}
  <form ref="form" @submit.stop.prevent="handleSubmitc">
    <b-form-group
      label="Card Name"
@@ -68,7 +69,7 @@
      label="List Title"
      label-for="list-input"
      >
-    <b-form-select id="list-input" v-model="listname" :options="listnamesget"> </b-form-select>
+    <b-form-select id="list-input" v-model="this.listidx" :options="listnamesget"> </b-form-select>
     </b-form-group>
 
     <b-form-group
@@ -220,6 +221,7 @@
           return
         }
         // fetch post to add card
+        console.log(this.crd)
         await fetch(`http://localhost:5000/api/updateCard/${this.id}`, {
           method: 'PUT',
           headers: {
@@ -229,8 +231,8 @@
           body: JSON.stringify({
             "card_title": this.crd.card_title,
             "card_content": this.crd.card_content,
-            "deadline_dt": this.crd.deadline_dt.split(" ")[0]
-
+            "deadline_dt": this.crd.deadline_dt.split(" ")[0],
+            "list_id" : this.listidx
           })
         });
         
@@ -238,7 +240,7 @@
         this.$nextTick(() => {
           this.$bvModal.hide()
         })
-        this.$router.go()
+        // this.$router.go()
       }
     }
   }
